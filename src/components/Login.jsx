@@ -16,7 +16,7 @@ const Login = () => {
         try {
             const { data } = await axios.post(`/user/${state}`, { name, email, password })
             if (data.success) {
-                toast.success(`${state === 'register' ? 'Account Created First' : 'User Login Success'}`)
+                toast.success(`${state === 'register' ? 'Account Created Done' : 'User Login Success'}`)
                 navigate('/')
                 await fetchUser()
                 setShowUserLogin(false)

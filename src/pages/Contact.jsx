@@ -1,4 +1,6 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import {
   FiUser,
   FiMail,
@@ -8,7 +10,34 @@ import {
   FiClock,
 } from 'react-icons/fi'
 
+
 const Contact = () => {
+
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [message, setMessage] = useState('')
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault()
+    try {
+      const { data } = await axios.post('/contact/message', { fullName, email, phone, message })
+      if (data.success) {
+        toast.success(data.message)
+        setFullName('')
+        setEmail('')
+        setPhone('')
+        setMessage('')
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+
+
   return (
     <section className="bg-gradient-to-b from-slate-50 to-white py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-20">
@@ -32,7 +61,7 @@ const Contact = () => {
               Send us a message
             </h2>
 
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={onSubmitHandler}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* Name */}
                 <div>
@@ -43,6 +72,8 @@ const Contact = () => {
                     <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="text"
+                      onChange={(e) => setFullName(e.target.value)}
+                      value={fullName}
                       placeholder="Akash Kumar"
                       className="w-full rounded-lg border border-gray-300 pl-10 pr-4 py-3 text-sm outline-none transition focus:border-black"
                     />
@@ -58,6 +89,8 @@ const Contact = () => {
                     <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
                       placeholder="akash@gmail.com"
                       className="w-full rounded-lg border border-gray-300 pl-10 pr-4 py-3 text-sm outline-none transition focus:border-black"
                     />
@@ -67,6 +100,17 @@ const Contact = () => {
 
               {/* Message */}
               <div>
+                <div className="flex items-start gap-4 rounded-lg border border-gray-300 p-3 mb-1">
+                  <FiPhone className="text-gray-600 mt-0.5" />
+                  <input
+                    onChange={(e) => setPhone(e.target.value)}
+                    type="tel"
+                    placeholder="9932907856"
+                    className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+                  />
+                </div>
+
+
                 <label className="block text-sm font-medium text-gray-600 mb-2">
                   Message
                 </label>
@@ -74,6 +118,8 @@ const Contact = () => {
                   <FiMessageSquare className="absolute left-3 top-4 text-gray-400" />
                   <textarea
                     rows="6"
+                    onChange={(e) => setMessage(e.target.value)}
+                    value={message}
                     placeholder="Tell us how we can help you..."
                     className="w-full rounded-lg border border-gray-300 pl-10 pr-4 py-3 text-sm outline-none transition focus:border-black resize-none"
                   />

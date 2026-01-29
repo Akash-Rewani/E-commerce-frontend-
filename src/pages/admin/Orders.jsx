@@ -44,34 +44,47 @@ const Orders = () => {
       {orders.map((order) => (
         <div key={order._id} className='bg-white p-3 mb-4 rounded'>
           {/* product list */}
-          {
-            order.items.map((item, idx) => (
+          {order.items?.map((item, idx) => {
+            const product = item.product
+            if (!product) return null   // skip broken products
+
+            return (
               <div key={idx} className='text-gray-700 flex flex-col lg:flex-row gap-4 mb-3'>
                 <div className='flex flex-[2] gap-2'>
                   <div className='flexCenter bg-primary rounded'>
-                    <img src={item.product.image[0]} alt="image" className='max-h-20 max-w-20 object-contain' />
+                    <img
+                      src={product.image?.[0]}
+                      alt="product"
+                      className='max-h-20 max-w-20 object-contain'
+                    />
                   </div>
+
                   <div className="block w-full">
-                    <h5 className="capitalize line-clamp-1">{item.product.name}</h5>
+                    <h5 className="capitalize line-clamp-1">{product.name}</h5>
+
                     <div className='flex flex-wrap gap-3 max-sm:gap-y-1 mt-1'>
                       <div className='flex items-center gap-x-2'>
                         <h5 className="medium-14">Price:</h5>
-                        <p>{currency}{item.product.offerPrice}</p>
+                        <p>{currency}{product.offerPrice}</p>
                       </div>
+
                       <div className='flex items-center gap-x-2'>
                         <h5 className="medium-14">Quantity:</h5>
                         <p>{item.quantity}</p>
                       </div>
-                      <div className='flex flex-wrap gap-3 max-sm:gap-y-1 mt-1'>
+
+                      <div className='flex items-center gap-x-2'>
                         <h5 className="medium-14">Size:</h5>
-                        <p>{item.size}</p>
+                        <p>{item.size || "N/A"}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            ))
-          }
+            )
+          })}
+
+
           {/* order summry */}
           <div className='flex flex-col lg:flex-row justify-between items-start gap-4 border-t border-gray300 pt-3'>
             <div className='flex flex-col gap-2'>

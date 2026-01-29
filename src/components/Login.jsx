@@ -14,7 +14,7 @@ const Login = () => {
     const onSubmitHandler = async (event) => {
         event.preventDefault()
         try {
-            const { data } = await axios.post(`/user/${state}`, { name, email, password })
+            const { data } = await axios.post(`/user/${state}`, { name, email, password }, { withCredentials: true })
             if (data.success) {
                 toast.success(`${state === 'register' ? 'Account Created Done' : 'User Login Success'}`)
                 navigate('/')
